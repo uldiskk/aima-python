@@ -1,4 +1,4 @@
-"""Reinforcement Learning (Chapter 21)"""
+"""Reinforcement Learning (Chapter 22)"""
 
 import random
 from collections import defaultdict
@@ -7,8 +7,8 @@ from mdp4e import MDP, policy_evaluation
 
 
 # _________________________________________
-# 21.2 Passive Reinforcement Learning
-# 21.2.1 Direct utility estimation
+# 22.2 Passive Reinforcement Learning
+# 22.2.1 Direct utility estimation
 
 
 class PassiveDUEAgent:
@@ -17,7 +17,7 @@ class PassiveDUEAgent:
     on a given MDP and policy.
 
     import sys
-    from mdp import sequential_decision_environment
+    from mdp4e import sequential_decision_7x6_environment
     north = (0, 1)
     south = (0,-1)
     west = (-1, 0)
@@ -80,19 +80,22 @@ class PassiveDUEAgent:
         """To be overridden in most cases. The default case
         assumes the percept to be of type (state, reward)"""
         return percept
+    
+    def print_U(self):
+        sorted_dict = dict(sorted(self.U.items()))
+        print('\n'.join([str(k)+':'+str(v) for k, v in sorted_dict.items()]))
+        return
 
 
-# 21.2.2 Adaptive dynamic programming
-
-
+# 22.2.2 Adaptive dynamic programming
 class PassiveADPAgent:
     """
-    [Figure 21.2]
+    [Figure 22.2]
     Passive (non-learning) agent that uses adaptive dynamic programming
     on a given MDP and policy.
 
     import sys
-    from mdp import sequential_decision_environment
+    from mdp import sequential_decision_7x6_environment
     north = (0, 1)
     south = (0,-1)
     west = (-1, 0)
@@ -168,12 +171,10 @@ class PassiveADPAgent:
         return percept
 
 
-# 21.2.3 Temporal-difference learning
-
-
+# 22.2.3 Temporal-difference learning
 class PassiveTDAgent:
     """
-    [Figure 21.4]
+    [Figure 22.4]
     The abstract class for a Passive (non-learning) agent that uses
     temporal differences to learn utility estimates. Override update_state
     method to convert percept to state and reward. The mdp being provided
@@ -235,9 +236,8 @@ class PassiveTDAgent:
 
 
 # __________________________________________
-# 21.3. Active Reinforcement Learning
-# 21.3.2 Learning an action-utility function
-
+# 22.3. Active Reinforcement Learning
+# 22.3.2 Learning an action-utility function
 
 class QLearningAgent:
     """
