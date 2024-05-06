@@ -415,7 +415,7 @@ def rbf_kernel(x, y=None, gamma=None):
 
 
 orientations = EAST, NORTH, WEST, SOUTH = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-turns = LEFT, RIGHT = (+1, -1)
+turns = LEFT, RIGHT, BACK = (+1, -1, 2)
 
 
 def turn_heading(heading, inc, headings=orientations):
@@ -425,9 +425,11 @@ def turn_heading(heading, inc, headings=orientations):
 def turn_right(heading):
     return turn_heading(heading, RIGHT)
 
-
 def turn_left(heading):
     return turn_heading(heading, LEFT)
+
+def turn_back(heading):
+    return turn_heading(heading, BACK)
 
 
 def distance(a, b):

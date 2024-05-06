@@ -13,7 +13,7 @@ from collections import defaultdict
 
 import numpy as np
 
-from utils4e import vector_add, orientations, turn_right, turn_left
+from utils4e import vector_add, orientations, turn_right, turn_left, turn_back
 
 
 class MDP:
@@ -157,9 +157,10 @@ class GridMDP(MDP):
 
     def calculate_T(self, state, action):
         if action:
-            return [(0.8, self.go(state, action)),
-                    (0.1, self.go(state, turn_right(action))),
-                    (0.1, self.go(state, turn_left(action)))]
+            return [(0.6, self.go(state, action)),
+                    (0.17, self.go(state, turn_right(action))),
+                    (0.13, self.go(state, turn_left(action))),
+                    (0.1, self.go(state, turn_back(action)))]
         else:
             return [(0.0, state)]
 
@@ -188,18 +189,13 @@ class GridMDP(MDP):
 
 
 """ [Figure 16.1]
-A 4x3 grid environment that presents the agent with a sequential decision problem.
+A 7x6 grid environment that presents the agent with a sequential decision problem.
 """
 
-# sequential_decision_environment = GridMDP([[-0.04, -0.04, -0.04, +1],
-#                                            [-0.04, None, -0.04, -1],
-#                                            [-0.04, -0.04, -0.04, -0.04]],
-#                                           terminals=[(3, 2), (3, 1)])
-
 sequential_decision_7x6_environment = GridMDP(
-    [[-0.04, -0.04, -0.04, None,  -0.04, -0.04, +1],     #5
+    [[-0.04, -0.04, -0.04, None,  -0.04, None,  +1],     #5
      [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04],
-     [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -1],
+     [None,  -0.04, -0.04, -0.04, -0.04, -0.04, -1],
      [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04],
      [-0.04, None,  -0.04, -0.04, -0.04, -0.04, -0.04],
      [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04]   #0
