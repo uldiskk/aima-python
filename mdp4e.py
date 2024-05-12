@@ -191,17 +191,44 @@ class GridMDP(MDP):
 """ [Figure 16.1]
 A 7x6 grid environment that presents the agent with a sequential decision problem.
 """
+u_val = [-1.2, -0.5, -0.06]
 
-sequential_decision_7x6_environment = GridMDP(
-    [[-0.04, -0.04, -0.04, None,  -0.04, None,  +1],     #5
-     [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04],
-     [None,  -0.04, -0.04, -0.04, -0.04, -0.04, -1],
-     [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04],
-     [-0.04, None,  -0.04, -0.04, -0.04, -0.04, -0.04],
-     [-0.04, -0.04, -0.04, -0.04, -0.04, -0.04, -0.04]   #0
+sequential_decision_7x6_environments = [
+    GridMDP(
+    [[u_val[0], u_val[0], u_val[0], None,     u_val[0], None,     +1],     #5
+     [u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0]],
+     [None,     u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], -1],
+     [u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0]],
+     [u_val[0], None,     u_val[0], u_val[0], u_val[0], u_val[0], u_val[0]],
+     [u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0], u_val[0]]   #0
      #0              2             4             6
      ],
-     terminals=[(6, 5), (6, 3)])
+     terminals=[(6, 5), (6, 3)]),
+
+    GridMDP(
+    [[u_val[1], u_val[1], u_val[1], None,     u_val[1], None,     +1],     #5
+     [u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1]],
+     [None,     u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], -1],
+     [u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1]],
+     [u_val[1], None,     u_val[1], u_val[1], u_val[1], u_val[1], u_val[1]],
+     [u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1], u_val[1]]   #0
+     #0              2             4             6
+     ],
+     terminals=[(6, 5), (6, 3)]),
+
+    GridMDP(
+    [[u_val[2], u_val[2], u_val[2], None,     u_val[2], None,     +1],     #5
+     [u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2]],
+     [None,     u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], -1],
+     [u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2]],
+     [u_val[2], None,     u_val[2], u_val[2], u_val[2], u_val[2], u_val[2]],
+     [u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2], u_val[2]]   #0
+     #0              2             4             6
+     ],
+     terminals=[(6, 5), (6, 3)])]
+
+
+
 
 
 # ______________________________________________________________________________
@@ -222,8 +249,6 @@ def q_value(mdp, s, a, U):
 # ______________________________________________________________________________
 # 16.2 Algorithms for MDPs
 # 16.2.1 Value Iteration
-
-
 def value_iteration(mdp, epsilon=0.001):
     """Solving an MDP by value iteration. [Figure 16.6]"""
 
@@ -248,7 +273,6 @@ def value_iteration(mdp, epsilon=0.001):
 def best_policy(mdp, U):
     """Given an MDP and a utility function U, determine the best policy,
     as a mapping from state to action."""
-
     pi = {}
     for s in mdp.states:
         pi[s] = max(mdp.actions(s), key=lambda a: q_value(mdp, s, a, U))
@@ -257,13 +281,11 @@ def best_policy(mdp, U):
 
 def expected_utility(a, s, U, mdp):
     """The expected utility of doing a in state s, according to the MDP and U."""
-
     return sum(p * U[s1] for (p, s1) in mdp.T(s, a))
 
 
 def policy_iteration(mdp):
     """Solve an MDP by policy iteration [Figure 17.7]"""
-
     U = {s: 0 for s in mdp.states}
     pi = {s: random.choice(mdp.actions(s)) for s in mdp.states}
     while True:
@@ -282,7 +304,6 @@ def policy_iteration(mdp):
 def policy_evaluation(pi, U, mdp, k=20):
     """Return an updated utility mapping U from each state in the MDP to its
     utility, using an approximation (modified policy iteration)."""
-
     R, T, gamma = mdp.R, mdp.T, mdp.gamma
     for i in range(k):
         for s in mdp.states:
@@ -290,10 +311,15 @@ def policy_evaluation(pi, U, mdp, k=20):
     return U
 
 
+def random_policy(mdp):
+    pi = {s: random.choice(mdp.actions(s)) for s in mdp.states}
+    return pi
+
+
+
+
 # ___________________________________________________________________
 # 16.4 Partially Observed MDPs
-
-
 class POMDP(MDP):
     """A Partially Observable Markov Decision Process, defined by
     a transition model P(s'|s,a), actions A(s), a reward function R(s),
